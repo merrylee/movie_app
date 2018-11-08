@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import logo from './logo.svg';
 import './App.css';
 import Movie from './Movie'
@@ -19,16 +20,31 @@ const movies = [
 ]
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
 
-          {movies.map(movie => {
-             return <Movie title={movie.title} poster={movie.poster} />
-          })}
+    // Render: componentWillMount() => render() => componentDidMount()
+    // Update: componentWillReceiveProps() => shouldComponentUpdate() => componentWillUpdate() => render => componentDidUpdate()
 
-      </div>
-    );
+    state = {
+        greeting: 'Hello!'
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({greeting: 'something'})
+        }, 3000)
+    }
+
+    render() {
+        console.log('did render')
+        return (
+          <div className="App">
+              {this.state.greeting}
+              {movies.map((movie, index) => {
+                 return <Movie title={movie.title} poster={movie.poster} key={index}/>
+              })}
+
+          </div>
+        );
   }
 }
 
