@@ -23,8 +23,8 @@ class Movie extends Component {
 class MoviePoster extends Component {
     render() {
         return (
-          <img src={this.props.poster} height="60"/>
-        );
+            <img src={this.props.poster} height="60"/>
+        )
     }
 }
 
