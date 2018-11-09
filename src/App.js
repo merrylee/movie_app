@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import logo from './logo.svg';
 import './App.css';
-import Movie from './Movie'
+import Movie from './Movie';
 
 
 class App extends Component {
@@ -10,32 +10,49 @@ class App extends Component {
     // Render: componentWillMount() => render() => componentDidMount()
     // Update: componentWillReceiveProps() => shouldComponentUpdate() => componentWillUpdate() => render => componentDidUpdate()
 
-    state = {}
-
+    state = {};
 
     componentDidMount() {
-        fetch('https://yts.am/api/v2/list_movies.json?quality=3D')
-            .then(response => response.json())
-            .then(json => console.log(json))
-            .catch(err => console.log(err))
-    }
+        this._getMovies();
+    };
 
     _renderMovies = () => {
-        const movies =   this.state.movies.map((movie, index) => {
-            return <Movie title={movie.title} poster={movie.poster} key={index}/>
-        })
-        return movies
-    }
+        const movies =   this.state.movies.map((movie) => {
+            console.log(movie);
+            return <Movie
+                title={movie.title_english}
+                poster={movie.medium_cover_image}
+                key={movie.id}
+                genres={movie.genres}
+                synopsis={movie.synopsis}
+            />
+        });
+        return movies;
+    };
+
+    _getMovies = async () => {
+        const movies =  await this._callApi();
+
+        this.setState({
+             movies
+        });
+    };
+
+    _callApi = () => {
+        return fetch('https://yts.am/api/v2/list_movies.json?quality=3D')
+            .then(response => response.json())
+            .then(aa => aa.data.movies)
+            .catch(err => console.log(err));
+    };
 
     render() {
-        console.log('did render')
+        const movies = this.state.movies;
         return (
-          <div className="App">
+          <div className={movies? "App" : "App-loading"}>
               {this.state.movies ? this._renderMovies() : 'Loading'}
-            App.js
           </div>
         );
-  }
+  };
 }
 
 export default App;
